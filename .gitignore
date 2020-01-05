@@ -34,3 +34,5 @@ build/
 /build/
 !mvn/wrapper/maven-wrapper.jar
 /out
+
+/src/main/resources/application.yml
