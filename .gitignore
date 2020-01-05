@@ -29,3 +29,8 @@ build/
 
 ### VS Code ###
 .vscode/
+
+.mvn
+/build/
+!mvn/wrapper/maven-wrapper.jar
+/out
