@@ -32,4 +32,4 @@ build/
 /build/
 /out
 
-src/main/resources/application.yml
+*.yml
