@@ -32,5 +32,4 @@ build/
 
 .mvn
 /build/
-!mvn/wrapper/maven-wrapper.jar
 /out
