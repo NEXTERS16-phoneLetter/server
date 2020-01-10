@@ -1,4 +1,4 @@
-package com.nexters.phoneletter.domain.user;
+package com.nexters.phoneletter.user.domain;
 
 
 import lombok.AccessLevel;
