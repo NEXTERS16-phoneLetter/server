@@ -32,6 +32,5 @@ build/
 /build/
 /out
 
-*.yml
-*.properties
-
+### db yml 파일 추가
+src/main/resources/dbInfo.yml
