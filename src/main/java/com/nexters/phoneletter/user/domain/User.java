@@ -1,22 +1,17 @@
 package com.nexters.phoneletter.user.domain;
 
-
-import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @NoArgsConstructor
 @Getter
 @Entity
-public class Users {
+public class User {
   @Id
-  @GeneratedValue
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   @Column(nullable = false)
@@ -26,7 +21,7 @@ public class Users {
   private String phoneNumber;
 
   @Builder
-  public Users(String email, String phoneNumber) {
+  public User(String email, String phoneNumber) {
     this.email = email;
     this.phoneNumber = phoneNumber;
   }
