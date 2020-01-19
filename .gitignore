@@ -33,3 +33,6 @@ build/
 /out
 
 *.yml
+
+# mac
+.DS_Store 
