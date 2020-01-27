@@ -1,8 +1,9 @@
 package com.nexters.phoneletter.user.controller;
 
 import com.nexters.phoneletter.user.domain.User;
-import com.nexters.phoneletter.user.repository.UserRepository;
 import com.nexters.phoneletter.user.dto.UserSaveRequestDto;
+import com.nexters.phoneletter.user.service.UserService;
+import com.nexters.phoneletter.user.service.UserServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -21,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(value = "/users", description = "유저 정보 CRUD API")
 public class UserController {
 
-  UserRepository userRepository;
+  private UserServiceImpl userService;
 
   @ApiOperation(value = "유저 회원 가입")
   @PostMapping()
@@ -30,8 +31,7 @@ public class UserController {
           @ApiResponse(code = 400, message = "Fail Create User")
   })
   public ResponseEntity signUp(@RequestBody UserSaveRequestDto userSaveRequestDto) {
-    User user = userRepository.save(userSaveRequestDto.toEntity());
-
+    User user = userService.createUser(userSaveRequestDto);
     return new ResponseEntity<User>(user, HttpStatus.CREATED);
   }
 
