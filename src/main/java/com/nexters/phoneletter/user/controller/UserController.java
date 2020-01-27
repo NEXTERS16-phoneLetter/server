@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping(value = "/user")
-@Api(value = "/user",description = "유저 정보 CRUD API")
+@RequestMapping(value = "/users")
+@Api(value = "/users",description = "유저 정보 CRUD API")
 public class UserController {
 
   UserRepository userRepository;
@@ -26,7 +26,7 @@ public class UserController {
           @ApiResponse(code=201,message = "Success Create User"),
           @ApiResponse(code=400,message = "Fail Create User")
   })
-  public String  saveUser(@RequestBody UserSaveRequestDto userSaveRequestDto){
+  public String signUp(@RequestBody UserSaveRequestDto userSaveRequestDto){
     userRepository.save(userSaveRequestDto.toEntity());
     return "success!";
   }
