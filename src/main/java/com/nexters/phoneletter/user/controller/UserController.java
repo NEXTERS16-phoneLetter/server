@@ -15,18 +15,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @AllArgsConstructor
 @RequestMapping(value = "/users")
-@Api(value = "/users",description = "유저 정보 CRUD API")
+@Api(value = "/users", description = "유저 정보 CRUD API")
 public class UserController {
 
   UserRepository userRepository;
 
   @ApiOperation(value = "유저 회원 가입")
-  @PostMapping("")
-  @ApiResponses(value={
-          @ApiResponse(code=201,message = "Success Create User"),
-          @ApiResponse(code=400,message = "Fail Create User")
+  @PostMapping()
+  @ApiResponses(value = {
+          @ApiResponse(code = 201, message = "Success Create User"),
+          @ApiResponse(code = 400, message = "Fail Create User")
   })
-  public String signUp(@RequestBody UserSaveRequestDto userSaveRequestDto){
+  public String signUp(@RequestBody UserSaveRequestDto userSaveRequestDto) {
     userRepository.save(userSaveRequestDto.toEntity());
     return "success!";
   }
