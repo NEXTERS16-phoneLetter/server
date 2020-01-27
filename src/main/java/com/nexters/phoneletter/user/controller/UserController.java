@@ -27,8 +27,8 @@ public class UserController {
   @ApiOperation(value = "유저 회원 가입")
   @PostMapping()
   @ApiResponses(value = {
-          @ApiResponse(code = 201, message = "Success Create User"),
-          @ApiResponse(code = 400, message = "Fail Create User")
+      @ApiResponse(code = 201, message = "Success Create User"),
+      @ApiResponse(code = 400, message = "Fail Create User")
   })
   public ResponseEntity signUp(@RequestBody UserSaveRequestDto userSaveRequestDto) {
     User user = userService.createUser(userSaveRequestDto);

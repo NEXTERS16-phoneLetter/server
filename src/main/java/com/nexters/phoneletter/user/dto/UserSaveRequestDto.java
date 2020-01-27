@@ -11,10 +11,10 @@ public class UserSaveRequestDto {
   private String email;
   private String phoneNumber;
 
-  public User toEntity(){
+  public User toEntity() {
     return User.builder()
-            .email(email)
-            .phoneNumber(phoneNumber)
-            .build();
+        .email(email)
+        .phoneNumber(phoneNumber)
+        .build();
   }
 }

@@ -8,7 +8,9 @@ import java.util.List;
 public interface UserService {
 
   public User createUser(UserSaveRequestDto userSaveRequestDto);
+
   public User getUser();
+
   public List<User> getAllUsers();
 
 }
