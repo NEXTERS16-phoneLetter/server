@@ -6,8 +6,6 @@ import com.nexters.phoneletter.user.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @AllArgsConstructor
 @Service
 public class UserServiceImpl implements UserService {
@@ -15,7 +13,7 @@ public class UserServiceImpl implements UserService {
   private UserRepository userRepository;
 
   @Override
-  public User createUser(UserSaveRequestDto userSaveRequestDto) {
+  public User signUp(UserSaveRequestDto userSaveRequestDto) {
     User user = userRepository.save(userSaveRequestDto.toEntity());
     return user;
   }

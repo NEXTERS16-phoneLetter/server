@@ -5,7 +5,7 @@ import com.nexters.phoneletter.user.dto.UserSaveRequestDto;
 
 public interface UserService {
 
-  public User createUser(UserSaveRequestDto userSaveRequestDto);
+  public User signUp(UserSaveRequestDto userSaveRequestDto);
 
   public User getUser();
 
