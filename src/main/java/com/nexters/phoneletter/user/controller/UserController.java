@@ -1,13 +1,12 @@
 package com.nexters.phoneletter.user.controller;
 
-import com.nexters.phoneletter.user.domain.User;
-import com.nexters.phoneletter.user.dto.UserSaveRequestDto;
-import com.nexters.phoneletter.user.service.UserService;
+import com.nexters.phoneletter.user.dto.UserRequestDto;
 import com.nexters.phoneletter.user.service.UserServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import javax.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,8 +29,8 @@ public class UserController {
       @ApiResponse(code = 201, message = "Success Create User"),
       @ApiResponse(code = 400, message = "Fail Create User")
   })
-  public ResponseEntity signUp(@RequestBody UserSaveRequestDto userSaveRequestDto) {
-    userService.createUser(userSaveRequestDto);
+  public ResponseEntity signUp(@RequestBody @Valid UserRequestDto userSaveRequestDto) {
+    userService.signUp(userSaveRequestDto);
     return new ResponseEntity<>(HttpStatus.CREATED);
   }
 

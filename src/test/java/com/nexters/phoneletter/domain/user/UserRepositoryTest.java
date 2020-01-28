@@ -37,7 +37,9 @@ public class UserRepositoryTest {
     //given
     userRepository.save(User.builder()
         .email("tjddus1109@gmail.com")
-        .phoneNumber("01097905388")
+        .phone1("010")
+        .phone2("9790")
+        .phone3("5388")
         .build());
 
     //when
@@ -46,7 +48,9 @@ public class UserRepositoryTest {
     //then
     User user = userList.get(0);
     assertThat(user.getEmail(), is("tjddus1109@gmail.com"));
-    assertThat(user.getPhoneNumber(), is("01097905388"));
+    assertThat(user.getPhone1(), is("010"));
+    assertThat(user.getPhone2(), is("9790"));
+    assertThat(user.getPhone3(), is("5388"));
   }
 
 }
