@@ -1,6 +1,5 @@
 package com.nexters.phoneletter.domain.user;
 
-
 import com.nexters.phoneletter.user.domain.User;
 import com.nexters.phoneletter.user.repository.UserRepository;
 import org.junit.Test;
