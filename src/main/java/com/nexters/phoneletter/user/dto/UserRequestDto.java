@@ -20,22 +20,9 @@ public class UserRequestDto {
   private String phoneNumber;
 
   public User toEntity() {
-    String[] phones = parsePhoneNumber();
     return User.builder()
         .email(email)
-        .phone1(phones[0])
-        .phone2(phones[1])
-        .phone3(phones[2])
+        .phoneNumber(phoneNumber)
         .build();
   }
-
-  private String[] parsePhoneNumber(){
-    String[] phones = new String[3];
-    int mid = phoneNumber.length() == 11 ? 7:6;
-    phones[0] = phoneNumber.substring(0,3);
-    phones[1] = phoneNumber.substring(3,mid);
-    phones[2] = phoneNumber.substring(mid,phoneNumber.length());
-    return phones;
-  }
-
 }
