@@ -15,8 +15,8 @@ public class UserServiceImpl implements UserService {
 
   @Override
   @Transactional
-  public Long signUp(UserRequestDto userSaveRequestDto) {
-    return userRepository.save(userSaveRequestDto.toEntity()).getId();
+  public User signUp(UserRequestDto userSaveRequestDto) {
+    return userRepository.save(userSaveRequestDto.toEntity());
   }
 
   @Override

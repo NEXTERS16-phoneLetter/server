@@ -1,5 +1,6 @@
 package com.nexters.phoneletter.user.controller;
 
+import com.nexters.phoneletter.user.domain.User;
 import com.nexters.phoneletter.user.dto.UserRequestDto;
 import com.nexters.phoneletter.user.service.UserServiceImpl;
 import io.swagger.annotations.Api;
@@ -30,8 +31,8 @@ public class UserController {
       @ApiResponse(code = 400, message = "Fail Create User")
   })
   public ResponseEntity signUp(@RequestBody @Valid UserRequestDto userSaveRequestDto) {
-    userService.signUp(userSaveRequestDto);
-    return new ResponseEntity<>(HttpStatus.CREATED);
+    User user = userService.signUp(userSaveRequestDto);
+    return new ResponseEntity<User>(user,HttpStatus.CREATED);
   }
 
 
