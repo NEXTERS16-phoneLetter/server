@@ -35,9 +35,9 @@ public class UserRepositoryTest {
   public void 유저저장_불러오기() {
     //given
     userRepository.save(User.builder()
-            .email("tjddus1109@gmail.com")
-            .phoneNumber("01097905388")
-            .build());
+        .email("tjddus1109@gmail.com")
+        .phoneNumber("01097905388")
+        .build());
 
     //when
     List<User> userList = userRepository.findAll();

@@ -10,6 +10,7 @@ import javax.persistence.*;
 @Getter
 @Entity
 public class User {
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
