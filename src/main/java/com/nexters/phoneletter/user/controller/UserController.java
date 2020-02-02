@@ -16,16 +16,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Api(value = "/users", description = "유저 정보 CRUD API")
 @RestController
 @AllArgsConstructor
 @RequestMapping(value = "/users")
-@Api(value = "/users", description = "유저 정보 CRUD API")
 public class UserController {
 
   private UserServiceImpl userService;
 
   @ApiOperation(value = "유저 회원 가입")
-  @PostMapping
+  @PostMapping(value = "/signup")
   @ApiResponses(value = {
       @ApiResponse(code = 201, message = "Success Create User"),
       @ApiResponse(code = 400, message = "Fail Create User")
