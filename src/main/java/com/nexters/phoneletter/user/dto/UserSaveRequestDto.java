@@ -11,7 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Getter
 @NoArgsConstructor
-public class UserRequestDto {
+public class UserSaveRequestDto {
 
 
   @NotBlank(message = "메일을 작성해주세요.")

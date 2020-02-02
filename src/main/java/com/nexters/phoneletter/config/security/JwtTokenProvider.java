@@ -47,7 +47,7 @@ public class JwtTokenProvider { //jwt 생성 및 검증 모듈
   }
 
   //jwt 토큰으로 인증정보 조회
-  public Authentication getAuthentication(String token){
+  public Authentication getAuthentication(String token) {
     UserDetails userDetails = userDetailsService.loadUserByUsername(this.getUserPk(token));
     return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
   }
