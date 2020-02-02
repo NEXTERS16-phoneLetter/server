@@ -7,10 +7,12 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Getter
 @NoArgsConstructor
 public class UserRequestDto {
+
 
   @NotBlank(message = "메일을 작성해주세요.")
   @Email(message = "이메일 양식을 지켜주세요.")
@@ -23,11 +25,11 @@ public class UserRequestDto {
   @NotBlank(message = "비밀번를 작성해주세요.")
   private String password;
 
-  public User toEntity() {
+  public User toEntity(PasswordEncoder passwordEncoder) {
     return User.builder()
         .email(email)
         .phoneNumber(phoneNumber)
-        .password(password)
+        .password(passwordEncoder.encode(password))
         .roles(Collections.singletonList("ROLE_USER"))
         .build();
   }
