@@ -2,6 +2,7 @@ package com.nexters.phoneletter.user.dto;
 
 import com.nexters.phoneletter.user.domain.User;
 import java.util.Collections;
+import java.util.List;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
@@ -12,7 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Getter
 @NoArgsConstructor
 public class UserSaveRequestDto {
-
+  static final List<String> ROLE_USER = Collections.singletonList("ROLE_USER");
 
   @NotBlank(message = "메일을 작성해주세요.")
   @Email(message = "이메일 양식을 지켜주세요.")
@@ -26,11 +27,12 @@ public class UserSaveRequestDto {
   private String password;
 
   public User toEntity(PasswordEncoder passwordEncoder) {
+
     return User.builder()
         .email(email)
         .phoneNumber(phoneNumber)
         .password(passwordEncoder.encode(password))
-        .roles(Collections.singletonList("ROLE_USER"))
+        .roles(ROLE_USER)
         .build();
   }
 }

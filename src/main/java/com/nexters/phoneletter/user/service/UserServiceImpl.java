@@ -6,6 +6,7 @@ import com.nexters.phoneletter.user.dto.UserSaveRequestDto;
 import com.nexters.phoneletter.user.dto.UserSigninRequestDto;
 import com.nexters.phoneletter.user.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import org.hibernate.Hibernate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +26,7 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
+  @Transactional
   public String signIn(UserSigninRequestDto userSigninRequestDto) {
     //TODO: 이메일이 없는경우 custom Exception signInfailed
     User user = userRepository.findByEmail(userSigninRequestDto.getEmail())
@@ -34,7 +36,6 @@ public class UserServiceImpl implements UserService {
     if (!passwordEncoder.matches(userSigninRequestDto.getPassword(), user.getPassword())) {
       throw new RuntimeException();
     }
-
     return jwtTokenProvider.createToken(user.getId().toString(), user.getRoles());
   }
 

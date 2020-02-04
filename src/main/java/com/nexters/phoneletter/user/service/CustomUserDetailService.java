@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @AllArgsConstructor
@@ -14,8 +15,8 @@ public class CustomUserDetailService implements UserDetailsService {
   private final UserRepository userRepository;
 
   @Override
-  public UserDetails loadUserByUsername(String userPK) throws UsernameNotFoundException {
+  public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
     //TODO exception custom plz
-    return userRepository.findById(Long.valueOf(userPK)).orElseThrow(RuntimeException::new);
+    return userRepository.findById(Long.parseLong(userId)).orElseThrow(RuntimeException::new);
   }
 }
