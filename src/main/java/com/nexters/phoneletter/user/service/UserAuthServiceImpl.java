@@ -87,11 +87,8 @@ public class UserAuthServiceImpl implements UserAuthService {
 
     @Override
     public boolean isMatchVerifyCode(UserAuthDto userAuthDto) {
-        if(userAuthDto.getCode().equals(redisTemplate.opsForValue().get(userAuthDto.getPhoneNumber()))){
-            // TODO 나중에 session을 통해 인증 여부 redis에 저장
-            return true;
-        }
-        return false;
+        // TODO 나중에 session을 통해 인증 여부 redis에 저장해함!
+        return userAuthDto.getCode().equals(redisTemplate.opsForValue().get(userAuthDto.getPhoneNumber()));
     }
 
     private static String generateVerificationCode() { // 6자리 인증 코드 생성
