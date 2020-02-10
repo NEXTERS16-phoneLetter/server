@@ -27,7 +27,7 @@ public class JwtTokenProvider { //jwt 생성 및 검증 모듈
   @Value("spring.jwt.secret")
   private String secretKey; // jwt secret key
 
-  static final private long TOKEN_VALID_MILISECOND = 1000L * 60 * 60; //1시간 후 만료
+  private static final long TOKEN_VALID_MILISECOND = 1000L * 60 * 60; //1시간 후 만료
 
   private final UserDetailsService userDetailsService;
 

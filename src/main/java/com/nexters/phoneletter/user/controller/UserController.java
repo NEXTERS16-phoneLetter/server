@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Api(value = "/users", description = "유저 정보 CRUD API")
+@Api(value = "/users", description = "유저 관리 API")
 @RestController
 @AllArgsConstructor
 @RequestMapping(value = "/users")
@@ -38,7 +38,6 @@ public class UserController {
     User user = userService.signUp(userSaveRequestDto);
 
     return responseService.getSingleResult(user);
-//    return new ResponseEntity<User>(user, HttpStatus.CREATED);
   }
 
   @ApiOperation(value = "로그인")

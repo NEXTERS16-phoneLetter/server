@@ -12,8 +12,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@AllArgsConstructor
 @Service
+@AllArgsConstructor
 public class UserServiceImpl implements UserService {
 
   private UserRepository userRepository;
@@ -44,3 +44,5 @@ public class UserServiceImpl implements UserService {
   }
 
 }
+
+
