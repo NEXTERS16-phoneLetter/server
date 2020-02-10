@@ -13,4 +13,9 @@ public class TestController {
     return "Hello World ! ";
   }
 
+  @GetMapping("/token")
+  public String tokn() {
+    return "Good JWT ! ";
+  }
+
 }
