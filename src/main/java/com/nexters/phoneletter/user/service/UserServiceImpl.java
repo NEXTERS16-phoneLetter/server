@@ -1,6 +1,7 @@
 package com.nexters.phoneletter.user.service;
 
 import com.nexters.phoneletter.advice.exception.CustomPasswordNotMatchException;
+import com.nexters.phoneletter.advice.exception.CustomSignUpFailException;
 import com.nexters.phoneletter.advice.exception.CustomUserNotFoundException;
 import com.nexters.phoneletter.config.security.JwtTokenProvider;
 import com.nexters.phoneletter.user.domain.User;
@@ -23,7 +24,13 @@ public class UserServiceImpl implements UserService {
   @Override
   @Transactional
   public User signUp(UserSaveRequestDto userSaveRequestDto) {
-    return userRepository.save(userSaveRequestDto.toEntity(passwordEncoder));
+    User user = null;
+    try {
+      user = userRepository.save(userSaveRequestDto.toEntity(passwordEncoder));
+    }catch(Exception e){
+      throw new CustomSignUpFailException();
+    }
+    return user;
   }
 
   @Override
