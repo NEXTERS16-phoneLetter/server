@@ -1,14 +1,22 @@
 package com.nexters.phoneletter.config.security;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.SignatureException;
+import io.jsonwebtoken.UnsupportedJwtException;
+import java.io.IOException;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -53,7 +61,7 @@ public class JwtTokenProvider { //jwt 생성 및 검증 모듈
   //jwt 토큰으로 인증정보 조회
   @Transactional
   public Authentication getAuthentication(String token) {
-    //TODO: DB x
+    //TODO: DB -> Redis 변경 ?
     UserDetails userDetails = userDetailsService.loadUserByUsername(this.getUserId(token));
 
     return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
@@ -75,13 +83,25 @@ public class JwtTokenProvider { //jwt 생성 및 검증 모듈
   }
 
   // Jwt 토큰의 유효성 + 만료일자 확인
-  public boolean validateToken(String jwtToken) {
+  public boolean validateToken(String jwtToken, ServletRequest request, ServletResponse response)
+      throws IOException {
+    HttpServletResponse httpServletResponse = (HttpServletResponse) response;
     try {
       Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwtToken);
       return !claims.getBody().getExpiration().before(new Date());
-    } catch (Exception e) {
-      return false;
+    }catch (SignatureException ex){
+      httpServletResponse.sendError(HttpServletResponse.SC_BAD_REQUEST,"Invalid JWT Signature");
+    }catch (MalformedJwtException ex){
+      httpServletResponse.sendError(HttpServletResponse.SC_BAD_REQUEST,"Invalid JWT token");
+    }catch (ExpiredJwtException ex){
+      request.setAttribute("expired",ex.getMessage());
+      httpServletResponse.sendError(HttpServletResponse.SC_BAD_REQUEST,"Expired JWT token");
+    }catch (UnsupportedJwtException ex){
+      httpServletResponse.sendError(HttpServletResponse.SC_BAD_REQUEST,"Unsupported JWT exception");
+    }catch (IllegalArgumentException ex){
+      httpServletResponse.sendError(HttpServletResponse.SC_BAD_REQUEST,"Jwt claims string is empty");
     }
+    return false;
   }
 
 }
