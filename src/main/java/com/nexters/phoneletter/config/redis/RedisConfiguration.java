@@ -16,7 +16,8 @@ public class RedisConfiguration {
     /** getConnection()을 호출할 때마다 새로운 LettuceConnection을 생성합니다. */
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
-        return new LettuceConnectionFactory();
+        LettuceConnectionFactory lettuceConnectionFactory = new LettuceConnectionFactory();
+        return lettuceConnectionFactory;
     }
 
     /** redisTemplate을 사용해서 redis 데이터를 직접 컨트롤할 수 있습니다. */

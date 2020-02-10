@@ -36,7 +36,6 @@ public class UserAuthServiceImpl implements UserAuthService {
     private RedisTemplate<String, String> redisTemplate;
 
     private DefaultHttpClient httpClient = new DefaultHttpClient();
-    private HttpPost httpPost = new HttpPost(COOL_SMS_URL);
 
     @Value("${letter.api_key}")
     private String api_key;
@@ -74,6 +73,8 @@ public class UserAuthServiceImpl implements UserAuthService {
                 .add(new BasicNameValuePair("text", text))
                 .build()
                 .collect(Collectors.toList());
+
+        HttpPost httpPost = new HttpPost(COOL_SMS_URL);
         httpPost.setEntity(new UrlEncodedFormEntity(nvps, "UTF-8"));
 
         HttpResponse response = httpClient.execute(httpPost);
@@ -85,7 +86,6 @@ public class UserAuthServiceImpl implements UserAuthService {
         if(userAuthDto.getCode().equals(redisTemplate.opsForValue().get(userAuthDto.getPhoneNumber()))){
             HttpSession session = request.getSession();
             session.setAttribute(userAuthDto.getPhoneNumber(), "verified");
-            session.setMaxInactiveInterval(20*60); // 20분
             return true;
         }
         return false;
