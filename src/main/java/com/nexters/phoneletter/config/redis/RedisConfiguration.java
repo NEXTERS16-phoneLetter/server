@@ -7,8 +7,10 @@ import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactor
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 
 @Configuration
+@EnableRedisHttpSession // session을 redis에 저장합니다.
 public class RedisConfiguration {
 
     /** getConnection()을 호출할 때마다 새로운 LettuceConnection을 생성합니다. */
