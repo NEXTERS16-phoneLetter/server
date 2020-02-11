@@ -1,5 +1,6 @@
 package com.nexters.phoneletter.config.redis;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -13,14 +14,25 @@ import org.springframework.session.data.redis.config.annotation.web.http.EnableR
 @EnableRedisHttpSession // session을 redis에 저장합니다.
 public class RedisConfiguration {
 
-    /** getConnection()을 호출할 때마다 새로운 LettuceConnection을 생성합니다. */
+    @Value("${spring.redis.host}")
+    private String redisHost;
+
+    @Value("${spring.redis.port}")
+    private int redisPort;
+
+    /**
+     * RedisConnectionFactory를 통해 내장 혹은 외부의 Redis를 연결합니다.
+     * getConnection()을 호출할 때마다 새로운 LettuceConnection을 생성합니다.
+     */
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
-        LettuceConnectionFactory lettuceConnectionFactory = new LettuceConnectionFactory();
-        return lettuceConnectionFactory;
+        return new LettuceConnectionFactory(redisHost, redisPort);
     }
 
-    /** redisTemplate을 사용해서 redis 데이터를 직접 컨트롤할 수 있습니다. */
+    /**
+     * redisTemplate을 사용해서 redis 데이터를 직접 컨트롤할 수 있습니다.
+     * RedisTemplate을 통해 RedisConnection에서 넘겨준 byte 값을 객체 직렬화합니다.
+     * */
     @Bean
     public RedisTemplate<String, Object> redisTemplate() {
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
