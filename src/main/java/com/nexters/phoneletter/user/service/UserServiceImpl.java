@@ -1,8 +1,8 @@
 package com.nexters.phoneletter.user.service;
 
-import com.nexters.phoneletter.advice.exception.CustomPasswordNotMatchException;
-import com.nexters.phoneletter.advice.exception.CustomSignUpFailException;
-import com.nexters.phoneletter.advice.exception.CustomUserNotFoundException;
+import com.nexters.phoneletter.advice.exception.PasswordNotMatchException;
+import com.nexters.phoneletter.advice.exception.SignUpFailException;
+import com.nexters.phoneletter.advice.exception.UserNotFoundException;
 import com.nexters.phoneletter.config.security.JwtTokenProvider;
 import com.nexters.phoneletter.user.domain.User;
 import com.nexters.phoneletter.user.dto.UserSaveRequestDto;
@@ -28,7 +28,7 @@ public class UserServiceImpl implements UserService {
     try {
       user = userRepository.save(userSaveRequestDto.toEntity(passwordEncoder));
     }catch(Exception e){
-      throw new CustomSignUpFailException();
+      throw new SignUpFailException();
     }
     return user;
   }
@@ -37,10 +37,10 @@ public class UserServiceImpl implements UserService {
   @Transactional
   public String signIn(UserSigninRequestDto userSigninRequestDto) {
     User user = userRepository.findByEmail(userSigninRequestDto.getEmail())
-        .orElseThrow(CustomUserNotFoundException::new);
+        .orElseThrow(UserNotFoundException::new);
 
     if (!passwordEncoder.matches(userSigninRequestDto.getPassword(), user.getPassword())) {
-      throw new CustomPasswordNotMatchException();
+      throw new PasswordNotMatchException();
     }
     return jwtTokenProvider.createToken(user.getId().toString(), user.getRoles());
   }

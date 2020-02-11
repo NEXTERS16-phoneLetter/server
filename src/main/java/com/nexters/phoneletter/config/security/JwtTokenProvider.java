@@ -32,8 +32,11 @@ public class JwtTokenProvider { //jwt 생성 및 검증 모듈
 
   static final String JWT_HEADER = "X-AUTH-TOKEN";
 
-  @Value("spring.jwt.secret")
+  @Value("${spring.jwt.secret}")
   private String secretKey; // jwt secret key
+
+  @Value("${spring.jwt.errorKey}")
+  private String REQUEST_JWT_ATT_KEY;
 
   private static final long TOKEN_VALID_MILISECOND = 1000L * 60 * 60; //1시간 후 만료
 
@@ -85,23 +88,22 @@ public class JwtTokenProvider { //jwt 생성 및 검증 모듈
   // Jwt 토큰의 유효성 + 만료일자 확인
   public boolean validateToken(String jwtToken, ServletRequest request, ServletResponse response)
       throws IOException {
-    HttpServletResponse httpServletResponse = (HttpServletResponse) response;
+
     try {
       Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwtToken);
       return !claims.getBody().getExpiration().before(new Date());
-    }catch (SignatureException ex){
-      httpServletResponse.sendError(HttpServletResponse.SC_BAD_REQUEST,"Invalid JWT Signature");
-    }catch (MalformedJwtException ex){
-      httpServletResponse.sendError(HttpServletResponse.SC_BAD_REQUEST,"Invalid JWT token");
-    }catch (ExpiredJwtException ex){
-      request.setAttribute("expired",ex.getMessage());
-      httpServletResponse.sendError(HttpServletResponse.SC_BAD_REQUEST,"Expired JWT token");
-    }catch (UnsupportedJwtException ex){
-      httpServletResponse.sendError(HttpServletResponse.SC_BAD_REQUEST,"Unsupported JWT exception");
-    }catch (IllegalArgumentException ex){
-      httpServletResponse.sendError(HttpServletResponse.SC_BAD_REQUEST,"Jwt claims string is empty");
+    } catch (SignatureException ex) {
+      request.setAttribute(REQUEST_JWT_ATT_KEY, "Invalid JWT Signature");
+    } catch (MalformedJwtException ex) {
+      request.setAttribute(REQUEST_JWT_ATT_KEY, "Invalid JWT token");
+    } catch (ExpiredJwtException ex) {
+      request.setAttribute(REQUEST_JWT_ATT_KEY, "Expired JWT token");
+//      request.setAttribute("expired",ex.getMessage());
+    } catch (UnsupportedJwtException ex) {
+      request.setAttribute(REQUEST_JWT_ATT_KEY, "Unsupported JWT exception");
+    } catch (IllegalArgumentException ex) {
+      request.setAttribute(REQUEST_JWT_ATT_KEY, "Jwt claims string is empty");
     }
     return false;
   }
-
 }

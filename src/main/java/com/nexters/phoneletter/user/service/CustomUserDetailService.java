@@ -1,6 +1,6 @@
 package com.nexters.phoneletter.user.service;
 
-import com.nexters.phoneletter.advice.exception.CustomUserNotFoundException;
+import com.nexters.phoneletter.advice.exception.UserNotFoundException;
 import com.nexters.phoneletter.user.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,6 +16,6 @@ public class CustomUserDetailService implements UserDetailsService {
 
   @Override
   public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
-    return userRepository.findById(Long.parseLong(userId)).orElseThrow(CustomUserNotFoundException::new);
+    return userRepository.findById(Long.parseLong(userId)).orElseThrow(UserNotFoundException::new);
   }
 }

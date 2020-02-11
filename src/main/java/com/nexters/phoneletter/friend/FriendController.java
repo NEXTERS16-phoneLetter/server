@@ -10,10 +10,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @Api(value = "/friends", description = "친구 관리 api")
-@RestControllerAdvice
 @AllArgsConstructor
 @RequestMapping(value = "/friends")
 public class FriendController {
