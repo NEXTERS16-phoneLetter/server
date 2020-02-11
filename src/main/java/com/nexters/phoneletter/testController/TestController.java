@@ -1,7 +1,6 @@
 package com.nexters.phoneletter.testController;
 
 import javax.servlet.http.HttpServletRequest;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

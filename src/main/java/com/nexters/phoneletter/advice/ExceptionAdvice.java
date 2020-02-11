@@ -51,4 +51,5 @@ public class ExceptionAdvice {
   protected ResponseEntity jwtNotValidException(HttpServletRequest request, Exception e) {
     return new ResponseEntity<>(JWT_NOT_VALID_ERR_MSG,HttpStatus.UNAUTHORIZED);
   }
+
 }
