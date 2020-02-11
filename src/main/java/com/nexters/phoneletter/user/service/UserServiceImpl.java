@@ -1,7 +1,8 @@
 package com.nexters.phoneletter.user.service;
 
-import com.nexters.phoneletter.advice.exception.CustomPasswordNotMatchException;
-import com.nexters.phoneletter.advice.exception.CustomUserNotFoundException;
+import com.nexters.phoneletter.advice.exception.PasswordNotMatchException;
+import com.nexters.phoneletter.advice.exception.SignUpFailException;
+import com.nexters.phoneletter.advice.exception.UserNotFoundException;
 import com.nexters.phoneletter.config.security.JwtTokenProvider;
 import com.nexters.phoneletter.user.domain.User;
 import com.nexters.phoneletter.user.dto.UserSaveRequestDto;
@@ -12,8 +13,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@AllArgsConstructor
 @Service
+@AllArgsConstructor
 public class UserServiceImpl implements UserService {
 
   private UserRepository userRepository;
@@ -23,17 +24,23 @@ public class UserServiceImpl implements UserService {
   @Override
   @Transactional
   public User signUp(UserSaveRequestDto userSaveRequestDto) {
-    return userRepository.save(userSaveRequestDto.toEntity(passwordEncoder));
+    User user = null;
+    try {
+      user = userRepository.save(userSaveRequestDto.toEntity(passwordEncoder));
+    }catch(Exception e){
+      throw new SignUpFailException();
+    }
+    return user;
   }
 
   @Override
   @Transactional
   public String signIn(UserSigninRequestDto userSigninRequestDto) {
     User user = userRepository.findByEmail(userSigninRequestDto.getEmail())
-        .orElseThrow(CustomUserNotFoundException::new);
+        .orElseThrow(UserNotFoundException::new);
 
     if (!passwordEncoder.matches(userSigninRequestDto.getPassword(), user.getPassword())) {
-      throw new CustomPasswordNotMatchException();
+      throw new PasswordNotMatchException();
     }
     return jwtTokenProvider.createToken(user.getId().toString(), user.getRoles());
   }
@@ -44,3 +51,5 @@ public class UserServiceImpl implements UserService {
   }
 
 }
+
+
