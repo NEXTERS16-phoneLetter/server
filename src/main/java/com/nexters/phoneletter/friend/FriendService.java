@@ -4,10 +4,10 @@ import com.nexters.phoneletter.user.domain.User;
 
 public interface FriendService {
 
-  public void addFriendByPhoneNumber(User user,FriendSaveRequestDto friendSaveRequestDto);
+  public void addFriendByPhoneNumber(User user, FriendSaveRequestDto friendSaveRequestDto);
 
   public void getFriendList();
 
-  public void deleteFriend();
+  public void blockFriend(User user, FriendDeleteRequestDto friendDeleteRequestDto);
 
 }
