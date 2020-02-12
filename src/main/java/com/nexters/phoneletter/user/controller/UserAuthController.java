@@ -28,8 +28,8 @@ public class UserAuthController {
             @ApiResponse(code = 400, message = "Fail")
     })
     @PostMapping("/sms")
-    public HttpStatus sendSms(@RequestBody String phonNumber){
-        userAuthService.sendSms(phonNumber);
+    public HttpStatus sendSms(@RequestBody UserAuthDto userAuthDto){
+        userAuthService.sendSms(userAuthDto);
         return HttpStatus.OK;
     }
 
@@ -40,11 +40,12 @@ public class UserAuthController {
             @ApiResponse(code = 400, message = "Fail")
     })
     @PostMapping("/sms/verify")
-    public HttpStatus verifyCode(HttpServletRequest request, @RequestBody UserAuthDto userAuthDto){
-        if(userAuthService.isMatchVerifyCode(userAuthDto, request)) {
+    public HttpStatus verifyCode(HttpServletRequest request, @RequestBody UserAuthDto userAuthDto) {
+        if (userAuthService.isMatchVerifyCode(userAuthDto, request)) {
             return HttpStatus.OK;
+        } else {
+            return HttpStatus.BAD_REQUEST;
         }
-        return HttpStatus.BAD_REQUEST;
     }
 
 }

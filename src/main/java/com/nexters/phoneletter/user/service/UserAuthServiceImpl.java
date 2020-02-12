@@ -48,17 +48,13 @@ public class UserAuthServiceImpl implements UserAuthService {
 
     @SneakyThrows({UnsupportedEncodingException.class, IOException.class, CoolsmsException.class})
     @Override
-    public void sendSms(String phoneNumber){
+    public void sendSms(UserAuthDto userAuthDto){
         Message coolsms = new Message(api_key, api_secret);
-
-        UserAuthDto userAuthDto = UserAuthDto.builder()
-                .code(generateVerificationCode())
-                .phoneNumber(phoneNumber)
-                .build();
+        userAuthDto.setCode(generateVerificationCode());
 
         // TODO key - phoneNumber, value - code, 캐시 유효 시간 5분
         redisTemplate.opsForValue().set(userAuthDto.getPhoneNumber(), userAuthDto.getCode());
-        redisTemplate.expire(userAuthDto.getPhoneNumber(), 300, TimeUnit.SECONDS);
+        redisTemplate.expire(userAuthDto.getPhoneNumber(), 5, TimeUnit.MINUTES);
         String text = "누구에게 인증번호 [" + userAuthDto.getCode() + "]를 입력해 주세요.";
         String salt = coolsms.getSalt();
         String timestamp = coolsms.getTimestamp();
@@ -69,10 +65,13 @@ public class UserAuthServiceImpl implements UserAuthService {
                 .add(new BasicNameValuePair("signature", coolsms.getSignature(api_secret, salt, timestamp)))
                 .add(new BasicNameValuePair("timestamp", timestamp))
                 .add(new BasicNameValuePair("from", from))
-                .add(new BasicNameValuePair("to", phoneNumber))
+                .add(new BasicNameValuePair("to", userAuthDto.getPhoneNumber()))
                 .add(new BasicNameValuePair("text", text))
                 .build()
                 .collect(Collectors.toList());
+
+        log.info(userAuthDto.getPhoneNumber());
+        log.info(userAuthDto.getCode());
 
         HttpPost httpPost = new HttpPost(COOL_SMS_URL);
         httpPost.setEntity(new UrlEncodedFormEntity(nvps, "UTF-8"));
