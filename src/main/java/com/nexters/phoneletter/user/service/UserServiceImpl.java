@@ -15,6 +15,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 @Service
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -25,11 +28,20 @@ public class UserServiceImpl implements UserService {
   private PasswordEncoder passwordEncoder;
   private JwtTokenProvider jwtTokenProvider;
 
+  private static final String AUTH_RESULT = "verified";
+
   @Override
   @Transactional
-  public User signUp(UserSaveRequestDto userSaveRequestDto) {
+  public User signUp(UserSaveRequestDto userSaveRequestDto, HttpServletRequest request) {
 
     logger.info("signUp");
+
+    HttpSession session = request.getSession();
+
+    if(!AUTH_RESULT.equals(session.getAttribute(userSaveRequestDto.getPhoneNumber()))){
+      logger.warn("SignUpFailException");
+      throw new SignUpFailException();
+    }
 
     User user = null;
     try {
@@ -47,7 +59,7 @@ public class UserServiceImpl implements UserService {
 
     logger.info("signIn");
     User user = userRepository.findByEmail(userSigninRequestDto.getEmail())
-        .orElseThrow(UserNotFoundException::new);
+            .orElseThrow(UserNotFoundException::new);
 
     if (!passwordEncoder.matches(userSigninRequestDto.getPassword(), user.getPassword())) {
       logger.warn("PasswordNotMatchException");
@@ -62,5 +74,3 @@ public class UserServiceImpl implements UserService {
   }
 
 }
-
-

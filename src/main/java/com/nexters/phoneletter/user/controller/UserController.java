@@ -8,6 +8,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
@@ -35,12 +37,12 @@ public class UserController {
       @ApiResponse(code = 201, message = "Success Create User"),
       @ApiResponse(code = 400, message = "Fail Create User")
   })
-  public ResponseEntity<User> signUp(@RequestBody @Valid UserSaveRequestDto userSaveRequestDto) {
+  public ResponseEntity<User> signUp(@RequestBody @Valid UserSaveRequestDto userSaveRequestDto, HttpServletRequest request) {
 
     logger.info("signUp()");
-    User user = userService.signUp(userSaveRequestDto);
+    User user = userService.signUp(userSaveRequestDto, request);
 
-    return new ResponseEntity<>(user,HttpStatus.OK);
+    return new ResponseEntity<>(user, HttpStatus.OK);
   }
 
   @ApiOperation(value = "로그인")
