@@ -5,6 +5,7 @@ import com.nexters.phoneletter.user.domain.User;
 import com.nexters.phoneletter.user.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @AllArgsConstructor
@@ -39,7 +40,20 @@ public class FriendServiceImpl implements FriendService {
   }
 
   @Override
-  public void deleteFriend() {
+  @Transactional
+  public void blockFriend(User user, FriendDeleteRequestDto friendDeleteRequestDto) {
+
+    System.out.println("service blockFriend");
+
+    Long userId = user.getId();
+    Long frieidId = friendDeleteRequestDto.getFriendId();
+
+    FriendId build = FriendId.builder()
+        .userId(userId)
+        .friendId(frieidId)
+        .build();
+
+    friendRepository.update(build);
 
   }
 }
