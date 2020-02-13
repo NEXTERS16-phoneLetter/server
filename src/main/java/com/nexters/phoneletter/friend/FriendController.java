@@ -5,6 +5,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import javax.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class FriendController {
 
   private final FriendServiceImpl friendService;
+  private static final Logger logger = LoggerFactory.getLogger(FriendController.class);
 
   @ApiOperation(value = "핸드폰번호로 친구 추가 하기")
   @PostMapping()
@@ -28,6 +31,7 @@ public class FriendController {
       @RequestBody @Valid FriendSaveRequestDto friendSaveRequestDto,
       @AuthenticationPrincipal User user) {
 
+    logger.info("addFriendByPhoneNumber()");
     friendService.addFriendByPhoneNumber(user, friendSaveRequestDto);
     return new ResponseEntity(HttpStatus.CREATED);
   }
@@ -38,6 +42,7 @@ public class FriendController {
       @RequestBody @Valid FriendDeleteRequestDto friendDeleteRequestDto,
       @AuthenticationPrincipal User user) {
 
+    logger.info("blockFriend()");
     friendService.blockFriend(user, friendDeleteRequestDto);
     return new ResponseEntity(HttpStatus.OK);
   }

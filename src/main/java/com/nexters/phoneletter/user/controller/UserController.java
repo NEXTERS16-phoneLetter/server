@@ -10,6 +10,8 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import javax.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,6 +25,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/users")
 public class UserController {
 
+  private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+
   private final UserServiceImpl userService;
 
   @ApiOperation(value = "회원가입")
@@ -32,6 +36,8 @@ public class UserController {
       @ApiResponse(code = 400, message = "Fail Create User")
   })
   public ResponseEntity<User> signUp(@RequestBody @Valid UserSaveRequestDto userSaveRequestDto) {
+
+    logger.info("signUp()");
     User user = userService.signUp(userSaveRequestDto);
 
     return new ResponseEntity<>(user,HttpStatus.OK);
@@ -44,7 +50,10 @@ public class UserController {
       @ApiResponse(code = 400, message = "Fail login")
   })
   public ResponseEntity signIn(@RequestBody @Valid UserSigninRequestDto userSigninRequestDto) {
+
+    logger.info("signIn()");
     String token = userService.signIn(userSigninRequestDto);
+
     return new ResponseEntity<String>(token, HttpStatus.OK);
   }
 
