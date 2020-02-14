@@ -23,12 +23,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   @Override // ignore check swagger resource
   public void configure(WebSecurity web) throws Exception {
     web.ignoring().antMatchers("/v2/api-docs", "/swagger-resources/**",
-        "/swagger-ui.html", "/webjars/**", "/swagger/**");
+            "/swagger-ui.html", "/webjars/**", "/swagger/**");
   }
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
-    http
         .httpBasic().disable() // REST API 임으로 기본설정 사용 x , 기본설정은 로그인 폼으로 이동함
         .csrf().disable() // CSRF : 사용자가 자신의 행위와 무관하게 다른 공격자가 의도한 행위를 하게 만드는 것(post patch delete)
         // Spring Security는 default 활성화. HttpSession과 동일한 생명주기를 가지는 Token 발행(GET).->요청마다 Token에 발행 되어있는지 확인으로 CSRF 예방
