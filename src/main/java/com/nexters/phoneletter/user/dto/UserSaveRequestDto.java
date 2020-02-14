@@ -13,8 +13,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Getter
 @NoArgsConstructor
 public class UserSaveRequestDto {
-  //singletonList : 1갸의 객체만 았는 리시트 반환.지정된 객체를 포함하는 immutable 한 리스트 반환
-  //list 를 추가 삭제시 UnsupportedOperationException 발생 시킴
+
+  /**
+   * singletonList : 1갸의 객체만 았는 리시트 반환.지정된 객체를 포함하는 immutable 한 리스트 반환
+   * list 를 추가 삭제시 UnsupportedOperationException 발생 시킴
+   */
   static final List<String> ROLE_USER = Collections.singletonList("ROLE_USER");
 
   @NotBlank(message = "메일을 작성해주세요.")
