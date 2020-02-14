@@ -40,7 +40,7 @@ public class UserController {
     logger.info("signUp()");
     User user = userService.signUp(userSaveRequestDto);
 
-    return new ResponseEntity<>(user,HttpStatus.OK);
+    return new ResponseEntity<>(user,HttpStatus.CREATED);
   }
 
   @ApiOperation(value = "로그인")

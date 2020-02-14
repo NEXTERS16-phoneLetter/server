@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
     User user = null;
     try {
       user = userRepository.save(userSaveRequestDto.toEntity(passwordEncoder));
-    }catch(Exception e){
+    } catch (Exception e) {
       logger.warn("SignUpFailException");
       throw new SignUpFailException();
     }
