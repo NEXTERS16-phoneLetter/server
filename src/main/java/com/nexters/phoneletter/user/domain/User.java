@@ -21,6 +21,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import org.hibernate.annotations.ColumnDefault;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -37,23 +38,23 @@ public class User implements UserDetails {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column(unique = true, length = 30)
+  @Column(name = "email",unique = true, length = 30)
   private String email;
 
   @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-  @Column(nullable = false, length = 100)
+  @Column(name = "password",length = 100)
   private String password;
 
-  @Column(nullable = false, unique = true)
+  @Column(name = "phone_number",nullable = false, unique = true)
   private String phoneNumber;
 
-  @Column
-  private String nickname;
+  @Column(name = "nickname")
+  private String nickname = "guest";
 
-  @Column
+  @Column(name = "profile")
   private String profile;
 
-  @Column
+  @Column(name = "type")
   private String type;
 
   @ElementCollection(fetch = FetchType.LAZY)

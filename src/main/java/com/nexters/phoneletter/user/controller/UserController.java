@@ -1,6 +1,7 @@
 package com.nexters.phoneletter.user.controller;
 
 import com.nexters.phoneletter.user.domain.User;
+import com.nexters.phoneletter.user.dto.KakaoUserRequestDto;
 import com.nexters.phoneletter.user.dto.UserSaveRequestDto;
 import com.nexters.phoneletter.user.dto.UserSigninRequestDto;
 import com.nexters.phoneletter.user.service.UserServiceImpl;
@@ -8,6 +9,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
@@ -40,7 +42,7 @@ public class UserController {
     logger.info("signUp()");
     User user = userService.signUp(userSaveRequestDto);
 
-    return new ResponseEntity<>(user,HttpStatus.OK);
+    return new ResponseEntity<>(user,HttpStatus.CREATED);
   }
 
   @ApiOperation(value = "로그인")
@@ -54,7 +56,21 @@ public class UserController {
     logger.info("signIn()");
     String token = userService.signIn(userSigninRequestDto);
 
-    return new ResponseEntity<String>(token, HttpStatus.OK);
+    return new ResponseEntity<>(token, HttpStatus.OK);
+  }
+
+  @ApiOperation(value = "카카오 로그인")
+  @PostMapping(value = "/kakao")
+  @ApiResponses(value = {
+      @ApiResponse(code = 200, message = "Success login"),
+      @ApiResponse(code = 400, message = "Fail login")
+  })
+  public ResponseEntity kakaoLogin(@RequestBody @Valid KakaoUserRequestDto kakaoUserRequestDto,
+      HttpSession httpSession) {
+
+    String token = userService.kakaoLogin(kakaoUserRequestDto);
+
+    return new ResponseEntity<>(token, HttpStatus.OK);
   }
 
 
