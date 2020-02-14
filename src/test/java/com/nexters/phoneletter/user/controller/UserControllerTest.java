@@ -7,11 +7,8 @@ import static org.hamcrest.text.IsEqualIgnoringCase.equalToIgnoringCase;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.nexters.phoneletter.user.domain.User;
-import com.nexters.phoneletter.user.repository.UserRepository;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,7 +20,6 @@ import org.springframework.core.env.Environment;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,14 +34,9 @@ public class UserControllerTest {
 
   @Autowired
   private TestRestTemplate restTemplate;
-  @Autowired
-  private Environment environment;
 
   @Before
   public void setUp() throws Exception {
-    for (int i = 0; i < environment.getActiveProfiles().length; i++) {
-      System.out.println("Spring.profile.active : " + environment.getActiveProfiles()[i]);
-    }
 
     System.out.println("Before()::User Table에 test유저 추가하기 ");
     MultiValueMap<String, String> headers = new LinkedMultiValueMap<String, String>();
@@ -94,7 +85,7 @@ public class UserControllerTest {
   }
 
   @Test
-  public void 회원가입_중복_실패_테스트_() throws Exception {
+  public void 회원가입_실패_테스트_() throws Exception {
 
     //Given : header 및 body 추가
     MultiValueMap<String, String> headers = new LinkedMultiValueMap<String, String>();
@@ -141,6 +132,30 @@ public class UserControllerTest {
     // Then : jwt token String인지 ,
     assertThat(userResponseEntity.getStatusCode(), is(HttpStatus.OK));
     assertThat(userResponseEntity.getBody(), instanceOf(String.class));
+  }
+
+  @Test
+  public void 로그인_실패_테스트() throws Exception {
+    //Given : header 및 body 추가
+    MultiValueMap<String, String> headers = new LinkedMultiValueMap<String, String>();
+    Map map = new HashMap<String, String>();
+    map.put("Content-Type", "application/json");
+
+    headers.setAll(map);
+
+    Map req_payload = new HashMap();
+    req_payload.put("email", "tjddus1109@gmail.com");
+    req_payload.put("password", "test");
+
+    HttpEntity<?> request = new HttpEntity<>(req_payload, headers);
+
+    // When
+    ResponseEntity<String> userResponseEntity = this.restTemplate
+        .postForEntity("/users/signin", request, String.class);
+
+    // Then : jwt token String인지 ,
+    assertThat(userResponseEntity.getStatusCode(), is(HttpStatus.BAD_REQUEST));
+    assertThat(userResponseEntity.getBody(), equalToIgnoringCase("로그인에 실패 하였습니다."));
   }
 
 }
