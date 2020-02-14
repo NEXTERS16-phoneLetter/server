@@ -6,8 +6,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,11 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 
+@Slf4j
 @Api(description = "전화번호 인증 API")
 @RestController
 public class UserAuthController {
-
-    private static final Logger logger = LoggerFactory.getLogger(UserAuthController.class);
 
     @Autowired
     UserAuthService userAuthService;
@@ -33,7 +31,7 @@ public class UserAuthController {
     })
     @PostMapping("/sms")
     public HttpStatus sendSms(@RequestBody UserAuthDto userAuthDto){
-        logger.info("sendSms()");
+        log.info("sendSms()");
         userAuthService.sendSms(userAuthDto);
         return HttpStatus.OK;
     }
@@ -46,7 +44,7 @@ public class UserAuthController {
     })
     @PostMapping("/sms/verify")
     public HttpStatus verifyCode(HttpServletRequest request, @RequestBody UserAuthDto userAuthDto) {
-        logger.info("verifyCode()");
+        log.info("verifyCode()");
         if (userAuthService.isMatchVerifyCode(userAuthDto, request)) {
             return HttpStatus.OK;
         } else {

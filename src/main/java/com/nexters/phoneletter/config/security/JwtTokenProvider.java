@@ -17,8 +17,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -27,12 +26,12 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @RequiredArgsConstructor
 @Component
 public class JwtTokenProvider { //jwt 생성 및 검증 모듈
 
   static final String JWT_HEADER = "X-AUTH-TOKEN";
-  private static final Logger logger = LoggerFactory.getLogger(JwtTokenProvider.class);
 
   @Value("${spring.jwt.secret}")
   private String secretKey; // jwt secret key
@@ -95,20 +94,20 @@ public class JwtTokenProvider { //jwt 생성 및 검증 모듈
       Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwtToken);
       return !claims.getBody().getExpiration().before(new Date());
     } catch (SignatureException ex) {
-      logger.warn("Invalid JWT Signature");
+      log.warn("Invalid JWT Signature");
       request.setAttribute(REQUEST_JWT_ATT_KEY, "Invalid JWT Signature");
     } catch (MalformedJwtException ex) {
-      logger.warn("Invalid JWT token");
+      log.warn("Invalid JWT token");
       request.setAttribute(REQUEST_JWT_ATT_KEY, "Invalid JWT token");
     } catch (ExpiredJwtException ex) {
-      logger.warn("Expired JWT token");
+      log.warn("Expired JWT token");
       request.setAttribute(REQUEST_JWT_ATT_KEY, "Expired JWT token");
 //      request.setAttribute("expired",ex.getMessage());
     } catch (UnsupportedJwtException ex) {
-      logger.warn("Unsupported JWT exception");
+      log.warn("Unsupported JWT exception");
       request.setAttribute(REQUEST_JWT_ATT_KEY, "Unsupported JWT exception");
     } catch (IllegalArgumentException ex) {
-      logger.warn("Jwt claims string is empty");
+      log.warn("Jwt claims string is empty");
       request.setAttribute(REQUEST_JWT_ATT_KEY, "Jwt claims string is empty");
     }
     return false;
