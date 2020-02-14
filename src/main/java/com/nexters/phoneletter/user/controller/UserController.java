@@ -12,6 +12,8 @@ import io.swagger.annotations.ApiResponses;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,6 +27,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/users")
 public class UserController {
 
+  private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+
   private final UserServiceImpl userService;
 
   @ApiOperation(value = "회원가입")
@@ -35,6 +39,7 @@ public class UserController {
   })
   public ResponseEntity<User> signUp(@RequestBody @Valid UserSaveRequestDto userSaveRequestDto) {
 
+    logger.info("signUp()");
     User user = userService.signUp(userSaveRequestDto);
 
     return new ResponseEntity<>(user,HttpStatus.CREATED);
@@ -48,6 +53,7 @@ public class UserController {
   })
   public ResponseEntity signIn(@RequestBody @Valid UserSigninRequestDto userSigninRequestDto) {
 
+    logger.info("signIn()");
     String token = userService.signIn(userSigninRequestDto);
 
     return new ResponseEntity<>(token, HttpStatus.OK);

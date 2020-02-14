@@ -15,6 +15,8 @@ import java.util.Collections;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.hibernate.Hibernate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +24,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
+
+  private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
   private UserRepository userRepository;
   private KakaoUserRepository kakaoUserRepository;
@@ -33,10 +37,14 @@ public class UserServiceImpl implements UserService {
   @Override
   @Transactional
   public User signUp(UserSaveRequestDto userSaveRequestDto) {
+
+    logger.info("signUp");
+
     User user = null;
     try {
       user = userRepository.save(userSaveRequestDto.toEntity(passwordEncoder));
     }catch(Exception e){
+      logger.warn("SignUpFailException");
       throw new SignUpFailException();
     }
     return user;
@@ -45,10 +53,13 @@ public class UserServiceImpl implements UserService {
   @Override
   @Transactional
   public String signIn(UserSigninRequestDto userSigninRequestDto) {
+
+    logger.info("signIn");
     User user = userRepository.findByEmail(userSigninRequestDto.getEmail())
         .orElseThrow(UserNotFoundException::new);
 
     if (!passwordEncoder.matches(userSigninRequestDto.getPassword(), user.getPassword())) {
+      logger.warn("PasswordNotMatchException");
       throw new PasswordNotMatchException();
     }
     return jwtTokenProvider.createToken(user.getId().toString(), user.getRoles());
