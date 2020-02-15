@@ -23,7 +23,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   @Override // ignore check swagger resource
   public void configure(WebSecurity web) throws Exception {
     web.ignoring().antMatchers("/v2/api-docs", "/swagger-resources/**",
-            "/swagger-ui.html", "/webjars/**", "/swagger/**");
+        "/swagger-ui.html", "/webjars/**", "/swagger/**");
   }
 
   @Override
@@ -38,7 +38,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
             .and()
             .authorizeRequests()
-            .antMatchers("/*/signin", "/*/signup").permitAll() // 로그인, 회원 가입은 누구나 가능, 항상 허용
+            .antMatchers("/*/signin", "/*/signup", "/*/kakao*").permitAll() // 로그인, 회원 가입은 누구나 가능, 항상 허용
             .antMatchers("/sms", "/sms/verify").permitAll() // 전화번호 인증
             .antMatchers(HttpMethod.GET, "/hello").permitAll() // test code hello world 도 허용
             .anyRequest().hasRole("USER")
@@ -51,4 +51,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   public PasswordEncoder passwordEncoder() {
     return PasswordEncoderFactories.createDelegatingPasswordEncoder();
   }
+
 }

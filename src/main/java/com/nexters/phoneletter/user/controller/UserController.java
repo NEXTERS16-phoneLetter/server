@@ -9,12 +9,12 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.SwaggerDefinition;
+import io.swagger.annotations.Tag;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,57 +22,74 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Api(value = "/users", description = "유저 관리 API")
+@Slf4j
+@Api(tags = {"회원 REST API"})
+@SwaggerDefinition(tags = {
+    @Tag(name = "회원 REST API", description = "회원 관리 REST API")
+})
 @RestController
 @AllArgsConstructor
 @RequestMapping(value = "/users")
 public class UserController {
 
-  private static final Logger logger = LoggerFactory.getLogger(UserController.class);
-
   private final UserServiceImpl userService;
 
-  @ApiOperation(value = "회원가입")
+  @ApiOperation(value = "일반 유저 회원가입")
   @PostMapping(value = "/signup")
   @ApiResponses(value = {
-      @ApiResponse(code = 201, message = "Success Create User"),
-      @ApiResponse(code = 400, message = "Fail Create User")
+      @ApiResponse(code = 201, message = "회원 가입 성공"),
+      @ApiResponse(code = 400, message = "회원 가입 실패")
   })
-  public ResponseEntity<User> signUp(@RequestBody @Valid UserSaveRequestDto userSaveRequestDto, HttpServletRequest request) {
+  public ResponseEntity<User> signUp(@RequestBody @Valid UserSaveRequestDto userSaveRequestDto,
+      HttpServletRequest request) {
 
-    logger.info("signUp()");
+    log.info("signUp()");
     User user = userService.signUp(userSaveRequestDto, request);
 
-    return new ResponseEntity<>(user,HttpStatus.CREATED);
+    return new ResponseEntity<>(user, HttpStatus.CREATED);
   }
 
-  @ApiOperation(value = "로그인")
+  @ApiOperation(value = "일반 유저 로그인")
   @PostMapping(value = "/signin")
   @ApiResponses(value = {
-      @ApiResponse(code = 200, message = "Success login"),
-      @ApiResponse(code = 400, message = "Fail login")
+      @ApiResponse(code = 200, message = "로그인 성공, JWT 반환"),
+      @ApiResponse(code = 400, message = "회원가입 실패")
   })
   public ResponseEntity signIn(@RequestBody @Valid UserSigninRequestDto userSigninRequestDto) {
 
-    logger.info("signIn()");
+    log.info("signIn()");
     String token = userService.signIn(userSigninRequestDto);
 
     return new ResponseEntity<>(token, HttpStatus.OK);
   }
 
   @ApiOperation(value = "카카오 로그인")
-  @PostMapping(value = "/kakao")
+  @PostMapping(value = "/kakaoSignin")
   @ApiResponses(value = {
-      @ApiResponse(code = 200, message = "Success login"),
-      @ApiResponse(code = 400, message = "Fail login")
+      @ApiResponse(code = 200, message = "카카오 유저 로그인 성공, JWT 반환"),
+      @ApiResponse(code = 400, message = "카카오 유저 로그인 실패")
   })
-  public ResponseEntity kakaoLogin(@RequestBody @Valid KakaoUserRequestDto kakaoUserRequestDto,
-      HttpSession httpSession) {
+  public ResponseEntity kakaoSignin(@RequestBody @Valid KakaoUserRequestDto kakaoUserRequestDto
+  ) {
 
+    log.info("kakaoSignin()");
     String token = userService.kakaoLogin(kakaoUserRequestDto);
 
     return new ResponseEntity<>(token, HttpStatus.OK);
   }
 
+  @ApiOperation(value = "카카오 회원가입")
+  @PostMapping(value = "/kakaoSignup")
+  @ApiResponses(value = {
+      @ApiResponse(code = 201, message = "카카오 유저 회원가입 성공, JWT 반환"),
+      @ApiResponse(code = 400, message = "카카오 유저 회원가입 실패")
+  })
+  public ResponseEntity kakaoRegister(@RequestBody @Valid KakaoUserRequestDto kakaoUserRequestDto) {
+
+    log.info("kakaoRegister()");
+    String token = userService.kakaoRegister(kakaoUserRequestDto);
+
+    return new ResponseEntity<>(token, HttpStatus.CREATED);
+  }
 
 }

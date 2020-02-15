@@ -13,7 +13,9 @@ public interface UserService {
 
   public String signIn(UserSigninRequestDto userSigninRequestDto);
 
-  public String kakaoLogin(KakaoUserRequestDto kakaoUserRequuestDto);
+  public String kakaoLogin(KakaoUserRequestDto kakaoUserRequestDto);
+
+  public String kakaoRegister(KakaoUserRequestDto kakaoUserRequestDto);
 
   public User getUser();
 }

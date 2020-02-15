@@ -4,16 +4,14 @@ import com.nexters.phoneletter.advice.exception.UserNotFoundException;
 import com.nexters.phoneletter.user.domain.User;
 import com.nexters.phoneletter.user.repository.UserRepository;
 import lombok.AllArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @AllArgsConstructor
 public class FriendServiceImpl implements FriendService {
-
-  private static final Logger logger = LoggerFactory.getLogger(FriendServiceImpl.class);
 
   private final UserRepository userRepository;
   private final FriendRepository friendRepository;
@@ -21,7 +19,7 @@ public class FriendServiceImpl implements FriendService {
   @Override
   public void addFriendByPhoneNumber(User user, FriendSaveRequestDto friendSaveRequestDto) {
 
-    logger.info("addFriendByPhoneNumber()");
+    log.info("addFriendByPhoneNumber()");
     Long userId = user.getId();
     String friendPhoneNumber = friendSaveRequestDto.getPhoneNumber();
 
@@ -33,7 +31,7 @@ public class FriendServiceImpl implements FriendService {
 
     if (userId == friendId) {
       //TODO: throw Exception "자신의 핸드폰번호입니다 " exception 추가 해야함
-      logger.warn("자신의 핸드폰 번호 error");
+      log.warn("자신의 핸드폰 번호 error");
       throw new UserNotFoundException();
     }
 
@@ -50,7 +48,7 @@ public class FriendServiceImpl implements FriendService {
   @Transactional
   public void blockFriend(User user, FriendDeleteRequestDto friendDeleteRequestDto) {
 
-    logger.info("blockFriend()");
+    log.info("blockFriend()");
     Long userId = user.getId();
     Long frieidId = friendDeleteRequestDto.getFriendId();
 
