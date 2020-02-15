@@ -4,11 +4,15 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @RestController
 public class DefaultController {
 
@@ -18,7 +22,7 @@ public class DefaultController {
   @ApiOperation(value = "테스트 API", notes = "문자열 'Hello World !' 를 리턴합니다.")
   @GetMapping("/hello")
   public String hello() {
-    return "Hello World ! ";
+    return "Hello World !";
   }
 
   @ApiOperation(value = "JWT 테스트 API", notes = "검증된 토큰이라면 'Good JWT !' 를 리턴합니다.")

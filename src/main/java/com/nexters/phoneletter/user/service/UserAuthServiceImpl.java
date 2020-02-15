@@ -50,7 +50,12 @@ public class UserAuthServiceImpl implements UserAuthService {
     @Override
     public void sendSms(UserAuthDto userAuthDto){
         Message coolsms = new Message(api_key, api_secret);
-        userAuthDto.setCode(generateVerificationCode());
+
+        userAuthDto = UserAuthDto.builder()
+                .phoneNumber(userAuthDto.getPhoneNumber())
+                .code(generateVerificationCode())
+                .build();
+
 
         // TODO key - phoneNumber, value - code, 캐시 유효 시간 5분
         redisTemplate.opsForValue().set(userAuthDto.getPhoneNumber(), userAuthDto.getCode());

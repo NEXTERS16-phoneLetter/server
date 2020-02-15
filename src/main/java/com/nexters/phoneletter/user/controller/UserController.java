@@ -11,7 +11,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import io.swagger.annotations.SwaggerDefinition;
 import io.swagger.annotations.Tag;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,10 +40,11 @@ public class UserController {
       @ApiResponse(code = 201, message = "회원 가입 성공"),
       @ApiResponse(code = 400, message = "회원 가입 실패")
   })
-  public ResponseEntity<User> signUp(@RequestBody @Valid UserSaveRequestDto userSaveRequestDto) {
+  public ResponseEntity<User> signUp(@RequestBody @Valid UserSaveRequestDto userSaveRequestDto,
+      HttpServletRequest request) {
 
     log.info("signUp()");
-    User user = userService.signUp(userSaveRequestDto);
+    User user = userService.signUp(userSaveRequestDto, request);
 
     return new ResponseEntity<>(user, HttpStatus.CREATED);
   }
@@ -69,7 +70,7 @@ public class UserController {
       @ApiResponse(code = 400, message = "카카오 유저 로그인 실패")
   })
   public ResponseEntity kakaoSignin(@RequestBody @Valid KakaoUserRequestDto kakaoUserRequestDto
-      ) {
+  ) {
 
     log.info("kakaoSignin()");
     String token = userService.kakaoLogin(kakaoUserRequestDto);
