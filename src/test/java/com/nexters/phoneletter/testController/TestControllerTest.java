@@ -17,31 +17,31 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class TestControllerTest {
 
-  @Autowired
-  private TestRestTemplate restTemplate;
-
-  @Before
-  public void setUp() {
-
-  }
-
-  @Test
-  public void HelloURL_성공_테스트() throws Exception {
-    // Given :
-
-    // when : 사용자가 지정하는 동작을 설명
-    String body = this.restTemplate.getForObject("/hello", String.class);
-
-    // Then : 지정된 동작으로 인해 예상되는 변경 사항
-    assertThat(body, equalToIgnoringCase("Hello World !"));
-  }
-
-  @Test
-  public void TokenURL_TOKENNull_실패_테스트() throws Exception {
-    //when
-    String body = this.restTemplate.getForObject("/token", String.class);
-
-    //Then
-    assertThat(body, equalToIgnoringCase("Error가 발생 했습니다."));
-  }
+//  @Autowired
+//  private TestRestTemplate restTemplate;
+//
+//  @Before
+//  public void setUp() {
+//
+//  }
+//
+//  @Test
+//  public void HelloURL_성공_테스트() throws Exception {
+//    // Given :
+//
+//    // when : 사용자가 지정하는 동작을 설명
+//    String body = this.restTemplate.getForObject("/hello", String.class);
+//
+//    // Then : 지정된 동작으로 인해 예상되는 변경 사항
+//    assertThat(body, equalToIgnoringCase("Hello World !"));
+//  }
+//
+//  @Test
+//  public void TokenURL_TOKENNull_실패_테스트() throws Exception {
+//    //when
+//    String body = this.restTemplate.getForObject("/token", String.class);
+//
+//    //Then
+//    assertThat(body, equalToIgnoringCase("Error가 발생 했습니다."));
+//  }
 }

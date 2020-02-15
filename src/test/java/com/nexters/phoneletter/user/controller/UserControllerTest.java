@@ -32,130 +32,130 @@ import org.springframework.util.MultiValueMap;
 @Transactional
 public class UserControllerTest {
 
-  @Autowired
-  private TestRestTemplate restTemplate;
-
-  @Before
-  public void setUp() throws Exception {
-
-    System.out.println("Before()::User Table에 test유저 추가하기 ");
-    MultiValueMap<String, String> headers = new LinkedMultiValueMap<String, String>();
-    Map map = new HashMap<String, String>();
-    map.put("Content-Type", "application/json");
-
-    headers.setAll(map);
-
-    Map req_payload = new HashMap();
-    req_payload.put("email", "test@gmail.com");
-    req_payload.put("phoneNumber", "01000000000");
-    req_payload.put("password", "test");
-
-    HttpEntity<?> request = new HttpEntity<>(req_payload, headers);
-
-    // When
-    this.restTemplate.postForEntity("/users/signup", request, String.class);
-
-    System.out.println("Before()::종료");
-  }
-
-  @Test
-  public void 회원가입_성공_테스트() throws Exception {
-
-    //Given : header 및 body 추가
-    MultiValueMap<String, String> headers = new LinkedMultiValueMap<String, String>();
-    Map map = new HashMap<String, String>();
-    map.put("Content-Type", "application/json");
-
-    headers.setAll(map);
-
-    Map req_payload = new HashMap();
-    req_payload.put("email", "tjddus1109@naver.com");
-    req_payload.put("phoneNumber", "01097905388");
-    req_payload.put("password", "1234");
-
-    HttpEntity<?> request = new HttpEntity<>(req_payload, headers);
-
-    // When
-    ResponseEntity<User> userResponseEntity = this.restTemplate
-        .postForEntity("/users/signup", request, User.class);
-
-    // Then
-    assertThat(userResponseEntity.getStatusCode(), is(HttpStatus.CREATED));
-    assertThat(userResponseEntity.getBody(), instanceOf(User.class));
-  }
-
-  @Test
-  public void 회원가입_실패_테스트_() throws Exception {
-
-    //Given : header 및 body 추가
-    MultiValueMap<String, String> headers = new LinkedMultiValueMap<String, String>();
-    Map map = new HashMap<String, String>();
-    map.put("Content-Type", "application/json");
-
-    headers.setAll(map);
-
-    Map req_payload = new HashMap();
-    req_payload.put("email", "tjddus1109@naver.com");
-    req_payload.put("phoneNumber", "01097905389");
-    req_payload.put("password", "1234");
-
-    HttpEntity<?> request = new HttpEntity<>(req_payload, headers);
-
-    // When
-    ResponseEntity<String> userResponseEntity = this.restTemplate
-        .postForEntity("/users/signup", request, String.class);
-
-    // Then
-    assertThat(userResponseEntity.getStatusCode(), is(HttpStatus.BAD_REQUEST));
-    assertThat(userResponseEntity.getBody(), equalToIgnoringCase("회원가입에 실패 하였습니다."));
-  }
-
-  @Test
-  public void 로그인_성공_테스트() throws Exception {
-    //Given : header 및 body 추가
-    MultiValueMap<String, String> headers = new LinkedMultiValueMap<String, String>();
-    Map map = new HashMap<String, String>();
-    map.put("Content-Type", "application/json");
-
-    headers.setAll(map);
-
-    Map req_payload = new HashMap();
-    req_payload.put("email", "test@gmail.com");
-    req_payload.put("password", "test");
-
-    HttpEntity<?> request = new HttpEntity<>(req_payload, headers);
-
-    // When
-    ResponseEntity<String> userResponseEntity = this.restTemplate
-        .postForEntity("/users/signin", request, String.class);
-
-    // Then : jwt token String인지 ,
-    assertThat(userResponseEntity.getStatusCode(), is(HttpStatus.OK));
-    assertThat(userResponseEntity.getBody(), instanceOf(String.class));
-  }
-
-  @Test
-  public void 로그인_실패_테스트() throws Exception {
-    //Given : header 및 body 추가
-    MultiValueMap<String, String> headers = new LinkedMultiValueMap<String, String>();
-    Map map = new HashMap<String, String>();
-    map.put("Content-Type", "application/json");
-
-    headers.setAll(map);
-
-    Map req_payload = new HashMap();
-    req_payload.put("email", "tjddus1109@gmail.com");
-    req_payload.put("password", "test");
-
-    HttpEntity<?> request = new HttpEntity<>(req_payload, headers);
-
-    // When
-    ResponseEntity<String> userResponseEntity = this.restTemplate
-        .postForEntity("/users/signin", request, String.class);
-
-    // Then : jwt token String인지 ,
-    assertThat(userResponseEntity.getStatusCode(), is(HttpStatus.BAD_REQUEST));
-    assertThat(userResponseEntity.getBody(), equalToIgnoringCase("로그인에 실패 하였습니다."));
-  }
+//  @Autowired
+//  private TestRestTemplate restTemplate;
+//
+//  @Before
+//  public void setUp() throws Exception {
+//
+//    System.out.println("Before()::User Table에 test유저 추가하기 ");
+//    MultiValueMap<String, String> headers = new LinkedMultiValueMap<String, String>();
+//    Map map = new HashMap<String, String>();
+//    map.put("Content-Type", "application/json");
+//
+//    headers.setAll(map);
+//
+//    Map req_payload = new HashMap();
+//    req_payload.put("email", "test@gmail.com");
+//    req_payload.put("phoneNumber", "01000000000");
+//    req_payload.put("password", "test");
+//
+//    HttpEntity<?> request = new HttpEntity<>(req_payload, headers);
+//
+//    // When
+//    this.restTemplate.postForEntity("/users/signup", request, String.class);
+//
+//    System.out.println("Before()::종료");
+//  }
+//
+//  @Test
+//  public void 회원가입_성공_테스트() throws Exception {
+//
+//    //Given : header 및 body 추가
+//    MultiValueMap<String, String> headers = new LinkedMultiValueMap<String, String>();
+//    Map map = new HashMap<String, String>();
+//    map.put("Content-Type", "application/json");
+//
+//    headers.setAll(map);
+//
+//    Map req_payload = new HashMap();
+//    req_payload.put("email", "tjddus1109@naver.com");
+//    req_payload.put("phoneNumber", "01097905388");
+//    req_payload.put("password", "1234");
+//
+//    HttpEntity<?> request = new HttpEntity<>(req_payload, headers);
+//
+//    // When
+//    ResponseEntity<User> userResponseEntity = this.restTemplate
+//        .postForEntity("/users/signup", request, User.class);
+//
+//    // Then
+//    assertThat(userResponseEntity.getStatusCode(), is(HttpStatus.CREATED));
+//    assertThat(userResponseEntity.getBody(), instanceOf(User.class));
+//  }
+//
+//  @Test
+//  public void 회원가입_실패_테스트_() throws Exception {
+//
+//    //Given : header 및 body 추가
+//    MultiValueMap<String, String> headers = new LinkedMultiValueMap<String, String>();
+//    Map map = new HashMap<String, String>();
+//    map.put("Content-Type", "application/json");
+//
+//    headers.setAll(map);
+//
+//    Map req_payload = new HashMap();
+//    req_payload.put("email", "tjddus1109@naver.com");
+//    req_payload.put("phoneNumber", "01097905389");
+//    req_payload.put("password", "1234");
+//
+//    HttpEntity<?> request = new HttpEntity<>(req_payload, headers);
+//
+//    // When
+//    ResponseEntity<String> userResponseEntity = this.restTemplate
+//        .postForEntity("/users/signup", request, String.class);
+//
+//    // Then
+//    assertThat(userResponseEntity.getStatusCode(), is(HttpStatus.BAD_REQUEST));
+//    assertThat(userResponseEntity.getBody(), equalToIgnoringCase("회원가입에 실패 하였습니다."));
+//  }
+//
+//  @Test
+//  public void 로그인_성공_테스트() throws Exception {
+//    //Given : header 및 body 추가
+//    MultiValueMap<String, String> headers = new LinkedMultiValueMap<String, String>();
+//    Map map = new HashMap<String, String>();
+//    map.put("Content-Type", "application/json");
+//
+//    headers.setAll(map);
+//
+//    Map req_payload = new HashMap();
+//    req_payload.put("email", "test@gmail.com");
+//    req_payload.put("password", "test");
+//
+//    HttpEntity<?> request = new HttpEntity<>(req_payload, headers);
+//
+//    // When
+//    ResponseEntity<String> userResponseEntity = this.restTemplate
+//        .postForEntity("/users/signin", request, String.class);
+//
+//    // Then : jwt token String인지 ,
+//    assertThat(userResponseEntity.getStatusCode(), is(HttpStatus.OK));
+//    assertThat(userResponseEntity.getBody(), instanceOf(String.class));
+//  }
+//
+//  @Test
+//  public void 로그인_실패_테스트() throws Exception {
+//    //Given : header 및 body 추가
+//    MultiValueMap<String, String> headers = new LinkedMultiValueMap<String, String>();
+//    Map map = new HashMap<String, String>();
+//    map.put("Content-Type", "application/json");
+//
+//    headers.setAll(map);
+//
+//    Map req_payload = new HashMap();
+//    req_payload.put("email", "tjddus1109@gmail.com");
+//    req_payload.put("password", "test");
+//
+//    HttpEntity<?> request = new HttpEntity<>(req_payload, headers);
+//
+//    // When
+//    ResponseEntity<String> userResponseEntity = this.restTemplate
+//        .postForEntity("/users/signin", request, String.class);
+//
+//    // Then : jwt token String인지 ,
+//    assertThat(userResponseEntity.getStatusCode(), is(HttpStatus.BAD_REQUEST));
+//    assertThat(userResponseEntity.getBody(), equalToIgnoringCase("로그인에 실패 하였습니다."));
+//  }
 
 }
