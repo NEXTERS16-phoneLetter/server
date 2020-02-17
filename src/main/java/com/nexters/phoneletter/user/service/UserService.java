@@ -15,7 +15,7 @@ public interface UserService {
 
   public String kakaoLogin(KakaoUserRequestDto kakaoUserRequestDto);
 
-  public String kakaoRegister(KakaoUserRequestDto kakaoUserRequestDto);
+  public String kakaoRegister(KakaoUserRequestDto kakaoUserRequestDto, HttpServletRequest request);
 
   public User getUser();
 }

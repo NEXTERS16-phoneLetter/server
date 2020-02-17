@@ -44,6 +44,7 @@ public class UserAuthServiceImpl implements UserAuthService {
     @Value("${letter.from}")
     private String from;
 
+    private static final String AUTH_RESULT = "verified";
     private static final String COOL_SMS_URL= "https://api.coolsms.co.kr/sms/2/send";
 
     @SneakyThrows({UnsupportedEncodingException.class, IOException.class, CoolsmsException.class})
@@ -55,7 +56,6 @@ public class UserAuthServiceImpl implements UserAuthService {
                 .phoneNumber(userAuthDto.getPhoneNumber())
                 .code(generateVerificationCode())
                 .build();
-
 
         // TODO key - phoneNumber, value - code, 캐시 유효 시간 5분
         redisTemplate.opsForValue().set(userAuthDto.getPhoneNumber(), userAuthDto.getCode());
@@ -75,9 +75,6 @@ public class UserAuthServiceImpl implements UserAuthService {
                 .build()
                 .collect(Collectors.toList());
 
-        log.info(userAuthDto.getPhoneNumber());
-        log.info(userAuthDto.getCode());
-
         HttpPost httpPost = new HttpPost(COOL_SMS_URL);
         httpPost.setEntity(new UrlEncodedFormEntity(nvps, "UTF-8"));
 
@@ -93,6 +90,12 @@ public class UserAuthServiceImpl implements UserAuthService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public boolean isVerifiedPhoneNumber(String phoneNumber, HttpServletRequest request){
+        HttpSession session = request.getSession();
+        return AUTH_RESULT.equals(session.getAttribute(phoneNumber));
     }
 
     private static String generateVerificationCode() { // 6자리 인증 코드 생성

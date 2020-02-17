@@ -17,12 +17,12 @@ import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Hibernate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 @Slf4j
 @Service
@@ -35,7 +35,8 @@ public class UserServiceImpl implements UserService {
   private PasswordEncoder passwordEncoder;
   private JwtTokenProvider jwtTokenProvider;
 
-  private static final String AUTH_RESULT = "verified";
+  @Autowired
+  UserAuthService userAuthService;
 
   @Override
   @Transactional
@@ -43,9 +44,7 @@ public class UserServiceImpl implements UserService {
 
     log.info("signUp");
 
-    HttpSession session = request.getSession();
-
-    if(!AUTH_RESULT.equals(session.getAttribute(userSaveRequestDto.getPhoneNumber()))){
+    if(!userAuthService.isVerifiedPhoneNumber(userSaveRequestDto.getPhoneNumber(), request)){
       log.warn("SignUpFailException");
       throw new SignUpFailException();
     }
@@ -95,9 +94,14 @@ public class UserServiceImpl implements UserService {
 
 
   @Override
-  public String kakaoRegister(KakaoUserRequestDto kakaoUserRequestDto) {
+  public String kakaoRegister(KakaoUserRequestDto kakaoUserRequestDto, HttpServletRequest request) {
 
     log.info("kakaoRegister");
+
+    if(!userAuthService.isVerifiedPhoneNumber(kakaoUserRequestDto.getPhoneNumber(), request)){
+      log.warn("SignUpFailException");
+      throw new SignUpFailException();
+    }
 
     User saveUser = User.builder()
         .phoneNumber(kakaoUserRequestDto.getPhoneNumber())

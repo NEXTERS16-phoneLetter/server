@@ -84,10 +84,11 @@ public class UserController {
       @ApiResponse(code = 201, message = "카카오 유저 회원가입 성공, JWT 반환"),
       @ApiResponse(code = 400, message = "카카오 유저 회원가입 실패")
   })
-  public ResponseEntity kakaoRegister(@RequestBody @Valid KakaoUserRequestDto kakaoUserRequestDto) {
+  public ResponseEntity kakaoRegister(@RequestBody @Valid KakaoUserRequestDto kakaoUserRequestDto,
+                                      HttpServletRequest request) {
 
     log.info("kakaoRegister()");
-    String token = userService.kakaoRegister(kakaoUserRequestDto);
+    String token = userService.kakaoRegister(kakaoUserRequestDto, request);
 
     return new ResponseEntity<>(token, HttpStatus.CREATED);
   }
